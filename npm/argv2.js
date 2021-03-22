@@ -26,6 +26,6 @@ for(i = 0; i < array.length; i++){
     } 
 }
 
-console.log(sum)
-console.log(mul)
-console.log(object)
+console.log('Egshgiin ard baigaa toonuudiin niilber: ', sum)
+console.log('Giiguulegchiin ard baigaa toonuudiin urjver: ', mul)
+console.log('Uusgesen object: ', object)
