@@ -11,19 +11,14 @@ for(i = 0; i < array.length; i++){
 
     if(['-a', '-e','-o','-u', '-i'].indexOf(array[i]) !== -1) {
         sum += parseInt(array[i + 1])
-    } else if (isNaN(parseInt(array[i]))) {
-        i++;
-    } else {
+    } else if (isNaN(array[i])) {
         mul *= parseInt(array[i + 1])
-    }
+    } 
 }
 
-console.log(object)
 console.log(sum)
 console.log(mul)
-// console.log(parseInt(array[5]))
-
-  // expected output: "My name is Matthew. Am I human? true"
+console.log(object)
 
 // Дээрх array өгөгдсөн бол доорхуудыг ол:
 //     1. Эгшигийн ард байгаа тоонуудын нийлбэр
