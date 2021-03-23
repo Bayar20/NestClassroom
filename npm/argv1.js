@@ -1,7 +1,7 @@
 // Дээрх бичсэн 2 программын өгөгдлийг Аргументаар авдаг болгох. (Hint: process.argv)
 //   Жишээ нь:
-//     $ node first.js 1 20 30 32 14 54
-//     $ node second.js -a 123 -b 32 -c 23 -d 21 -i 24
+//     $ node argv1.js 1 20 30 32 14 54
+//     $ node argv2.js -a 123 -b 32 -c 23 -d 21 -i 24
 
 var numbers = []
 for (i = 0; i < process.argv.length - 2; i++) {
