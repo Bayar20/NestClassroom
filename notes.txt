@@ -1,2 +1,11 @@
 You guys can do it!
 Keep doing it!
+
+
+Declarative programming
+
+Imperative programming
+
+Programming paradigms - imperative , declarative
+
+Procedural, object-oriented, Functional, Logic, Mathematical
