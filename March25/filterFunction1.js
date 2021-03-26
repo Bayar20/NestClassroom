@@ -7,7 +7,7 @@ const persons = [
     {id: 5, name: 'Bat4', age: 11}
 ];
 
-let getAdults = (obj) => obj.age >= 18
+let getAdults = (obj) => obj.age >= 18 ? 1 : 0
 
 let adults = persons.filter(getAdults)
 
