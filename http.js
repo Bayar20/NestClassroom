@@ -23,7 +23,7 @@ const server = http.createServer((request, response) => {
             responseMessage = responseMessage + `
             <style>
             h1 {
-                color: ${queryParams ['color']}
+                color: ${queryParams['color']}
             }
             </style>
             `
