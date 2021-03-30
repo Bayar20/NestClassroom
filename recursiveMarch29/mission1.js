@@ -22,15 +22,24 @@
 
 
 n = 10
+
+let obj = {}
 function recurseFb (n) {
     if (n === 2 || n === 1 ){
         return 1;
     }
-    let ret = recurseFb(n - 1) + recurseFb(n - 2);
-    // console.log(`${n} : ${ret}`);
-    return ret;
+
+    if (obj[`${n}`] in obj) {
+        return obj[`${n}`]
+    }
+
+    obj[`${n}`] = recurseFb(n - 1) + recurseFb(n - 2);
+    console.log(obj[`${n}`])
+    return obj[`${n}`]
 }
 
-for (i = 1; i <= n; i++){
-    console.log(recurseFb(i))
-}
+console.log(recurseFb(n));
+
+// for (i = 1; i <= n; i++){
+//     console.log(recurseFb(i))
+// }
