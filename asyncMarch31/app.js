@@ -17,7 +17,6 @@ rl.question("Цаг агаарын мэдээ авах байршлийг ору
         }
 
         rl.question ('Зөв хаягийг сонгоно уу: ', (choice) => {
-           choice = parseInt(choice);
            
            let latitude = cities[choice].center[1];
            let longitude = cities[choice].center[0];
