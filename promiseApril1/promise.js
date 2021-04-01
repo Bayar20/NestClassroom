@@ -1,12 +1,13 @@
 let chalk = require('chalk')
 
-let array = ['NaN', 101, 202];
+let array = [100, 101, 202, "text", 505, NaN];
 
 const promise = new Promise((resolve, reject) => {
-    let index = Math.round(Math.random() * 2)
+    let index = Math.round(Math.random() * 5)
+    console.log(index)
     console.log(chalk.yellow('Input value: ', array[index]))
 
-    if (array[index] == 'NaN') {
+    if (isNaN(array[index])) {
         reject('Rejected: Not a Number');
     } else if (array[index] % 2 != 0) {
         resolve('Resolved: Odd number');
