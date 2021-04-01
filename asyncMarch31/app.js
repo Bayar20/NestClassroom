@@ -73,7 +73,7 @@ let weatherShow = (lat, long) => axios.get(`https://api.darksky.net/forecast/81d
     let temp = `${calcCelsius(response.data.currently.temperature)}^C`;
     let precip = response.data.currently.precipProbability * 100;
     let hourly = response.data.hourly.summary;
-    
+
     console.log(chalk.green('Яг одоо: '), chalk.yellow(temp), chalk.green('градус'),);
     console.log(chalk.green(`Цас бороо орох магадлал: `), chalk.yellow(precip,'%'));
     console.log(chalk.green('Цаг агаарын өнөөдрийн төлөв: '), chalk.yellow(hourly))
