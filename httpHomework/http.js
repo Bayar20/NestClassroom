@@ -8,14 +8,17 @@ const args = require('yargs')
     .argv
 
 const server = http.createServer((request, response) => {
+    if (request.url.includes('favicon.ico')) return;
     // const filePath = `.${ url.parse(request.url).pathname }`;
     const query = url.parse(request.url, true).query;
-    const text = query.text;    
-    const color = query.color;
-    
-    //         h1 {
-    //             color: ${queryParams['color']}
-    //         }
+    let text = query.text; 
+    if (!text) {
+        text = "Hello World"
+    }   
+    let color = query.color;
+    if (!color) {
+        color = 'red'
+    }
 
     response.write(`<h1 style= "color: ${ color}" > ${text} </h1>`);
     response.end();
@@ -24,6 +27,5 @@ const server = http.createServer((request, response) => {
 
 server.listen(args.p, () => {
     console.log('Started http server...')
-    console.log(chalk[color])
 
 });
