@@ -1,58 +1,140 @@
-let readline = require('readline')
-let chalk = require('chalk')
+const chalk = require('chalk');
 
-// If the stream is TTY, then it must  be in RAW mode
-if (process.stdin.isTTY)
-  process.stdin.setRawMode(true);
+const stdin = process.stdin;
+stdin.setRawMode(true);
+stdin.resume();
+stdin.setEncoding('utf8');
 
-let rl = readline.createInterface({
- input: process.stdin,
- output: process.stdout
-});
+const KEY_UP = '\u001B\u005B\u0041';
+const KEY_RIGHT = '\u001B\u005B\u0043';
+const KEY_DOWN = '\u001B\u005B\u0042';
+const KEY_LEFT = '\u001B\u005B\u0044';
+const KEY_CTRL_C = '\u0003';
 
-readline.emitKeypressEvents(process.stdin)
-process.stdin.on('keypress', (key) => {
-    console.log(`${key} pressed`)
-})
+const BOARD_CHAR = '\u00b7';
+const BOARD_WIDTH = 20;
+const BOARD_HEIGHT = 10;
+const BOARD_TITLE = 'SNAKE';
 
-const row = c => n => c.repeat(n)
-const col = row => n => (row + '\n').repeat(n)
-const newLine = () => '\033c'
-const rnd = (min) => (max) => Math.round(Math.random() * (max - min))
+const DIRECTIONS = {
+    UP: 'up',
+    RIGHT: 'right',
+    DOWN: 'down',
+    LEFT: 'left',
+};
 
-let gameState = {
-    alive: true,
-    // direction: R,
-    score: 0,
+const SNAKE_CHAR = '\u25aa'; // \u25ab
+const SNAKE = [
+    { x: 15, y: 5 },
+    { x: 16, y: 5 },
+    { x: 17, y: 5 },
+];
+let SNAKE_DIRECTION = DIRECTIONS.DOWN;
 
+const APPLE_CHAR = '\uf8ff';
+let APPLE_Y = 5;
+let APPLE_X = 5;
+
+const board = [];
+const column = BOARD_CHAR.repeat(BOARD_WIDTH).split('');
+for (let i = 0; i < BOARD_HEIGHT; i ++) {
+    board.push(column);
 }
 
-const BOARD_CHAR = '*';
-const BOARD_WIDTH = 10;
-const BOARD_HEIGHT = 10;
+const getRandomCoord = () => {
+    const x = Math.round(Math.random() * (BOARD_WIDTH - 1));
+    const y = Math.round(Math.random() * (BOARD_HEIGHT - 1));
+    return [x, y];
+}
 
-let board = col
+// Reading key inputs
+stdin.on('data', (key) => {
+    switch (key) {
+        case KEY_UP:
+            SNAKE_DIRECTION = DIRECTIONS.UP;
+            break;
+        case KEY_RIGHT:
+            SNAKE_DIRECTION = DIRECTIONS.RIGHT;
+            break;
+        case KEY_DOWN:
+            SNAKE_DIRECTION = DIRECTIONS.DOWN;
+            break;
+        case KEY_LEFT:
+            SNAKE_DIRECTION = DIRECTIONS.LEFT;
+            break;
+        case KEY_CTRL_C:
+            process.exit();
+            break;
+    }
+});
 
 setInterval(() => {
-    const r = rnd(0)(255)
-    const g = rnd(0)(255)
-    const b = rnd(0)(255)
+    console.clear();
 
-    let header = newLine()
-    header += chalk.rgb(r,g,b)(row(' ')(12) + 'SNAKE' + row(' ')(12))
-    console.log(header)
+    const headerPadStart = (BOARD_WIDTH + BOARD_TITLE.length) / 2;
+    console.log(chalk.green(BOARD_TITLE.padStart(headerPadStart)));
 
-    // let board = createBoard(HEIGHT,WIDTH);
-    // baord = addSnakeToBoard(board);
-    // board = appleToBoard(board);
-    // board[gameState.apple.y][gameState.apple.y] = 'A';
-    // drawBoard(board);
-    // moveSnake();
-    // check();
-}, 80)
+    switch (SNAKE_DIRECTION) {
+        case DIRECTIONS.UP:
+            SNAKE.unshift({
+                x: SNAKE[0].x,
+                y: SNAKE[0].y - 1,
+            });
+            break;
+        case DIRECTIONS.RIGHT:
+            SNAKE.unshift({
+                x: SNAKE[0].x + 1,
+                y: SNAKE[0].y,
+            });
+            break;
+        case DIRECTIONS.DOWN:
+            SNAKE.unshift({
+                x: SNAKE[0].x,
+                y: SNAKE[0].y + 1,
+            });
+            break;
+        case DIRECTIONS.LEFT:
+            SNAKE.unshift({
+                x: SNAKE[0].x - 1,
+                y: SNAKE[0].y,
+            });
+            break;
+    }
+    if (SNAKE[0].y === APPLE_Y && SNAKE[0].x === APPLE_X) {
+        const coords = getRandomCoord();
+        APPLE_X = coords[0];
+        APPLE_Y = coords[1];
+    } else {
+        SNAKE.pop();
+    }
 
-// const col = function (row) {
-//     return function (n) {
-//         return (row + '\n').repeat(n)
-//     }
-// }
+    if (SNAKE[0].x < 0)                SNAKE[0].x = BOARD_WIDTH - 1;
+    if (SNAKE[0].x > BOARD_WIDTH - 1)  SNAKE[0].x = 0;
+    if (SNAKE[0].y < 0)                SNAKE[0].y = BOARD_HEIGHT - 1;
+    if (SNAKE[0].y > BOARD_HEIGHT - 1) SNAKE[0].y = 0;
+
+    board.map((col, y) => {
+        return col.map((char, x) => {
+            const isSnakeBody = SNAKE.find((coord) => {
+                return coord.x === x && coord.y === y;
+            });
+            if (isSnakeBody) {
+                return SNAKE_CHAR;
+            }
+
+            if (y === APPLE_Y && x === APPLE_X) {
+                return APPLE_CHAR;
+            }
+            return char;
+        });
+    }).forEach((col) => {
+        console.log(col.join(''));
+    });
+
+    const isDead = SNAKE.find((coord, index) =>
+        index !== 0 && coord.x === SNAKE[0].x && coord.y === SNAKE[0].y)
+    if (isDead) {
+        console.log('GAME OVER!');
+        process.exit();
+    }
+}, 300);
