@@ -40,6 +40,7 @@ rl.question("Цаг агаарын мэдээ авах байршлийг ору
               rl.close()
             } else {
               const [lng, lat] = cities[choice].center;
+              console.log(lng,lat)
               rl.close()
               weatherShow(lat, lng)
             }
